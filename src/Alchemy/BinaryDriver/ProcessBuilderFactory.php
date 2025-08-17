@@ -165,8 +165,17 @@ class ProcessBuilderFactory implements ProcessBuilderFactoryInterface
                 return !is_array($value);
             });
 
+            // excute function hook 
+            if (function_exists('ffmpeg_hook_process_builder_create')) {
+                $script = ffmpeg_hook_process_builder_create($script);
+            }
+
             return new Process($script, null, $env, null, $this->timeout);
         } else {
+            // excute function hook 
+            if (function_exists('ffmpeg_hook_process_builder_create')) {
+                $arguments = ffmpeg_hook_process_builder_create($arguments);
+            }
             return $this->builder
                 ->setArguments($arguments)
                 ->getProcess();
